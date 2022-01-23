@@ -1,7 +1,7 @@
-CREATE TABLE member (
+﻿CREATE TABLE member (
 	id	varchar2(20)		NOT NULL,
 	password	varchar2(300)		NOT NULL,
-	email	varchar2(11)		NOT NULL,
+	email	varchar2(30)		NOT NULL,
 	nickname	varchar2(20)		NOT NULL,
 	name	varchar2(20)		NOT NULL,
 	phone	varchar2(11)		NULL,
@@ -13,6 +13,8 @@ CREATE TABLE member (
 	,CONSTRAINT pk_member_id PRIMARY KEY(id)
 	,CONSTRAINT ck_member_enabled check(enabled in (0, 1))
 	,CONSTRAINT ck_member_report_yn check(report_yn in ('Y', 'N'))
+	,CONSTRAINT uk_member_email UNIQUE(email)
+	,CONSTRAINT uk_member_nickname UNIQUE(nickname)
 );
 
 CREATE TABLE book_info (
@@ -38,11 +40,13 @@ CREATE TABLE inquire (
 	category	varchar2(20)		NOT NULL,
 	content	varchar2(4000)		NOT NULL,
 	reg_date	date	DEFAULT current_date	NOT NULL,
-	member_id	varchar2(20)		NOT NULL
+	member_id	varchar2(20)		NOT NULL,
+	condition	number	NOT NULL
 
 	,CONSTRAINT pk_inquire_no PRIMARY KEY(no)
 	,CONSTRAINT fk_inquire_member_id FOREIGN KEY(member_id) REFERENCES member(id)
 	,CONSTRAINT ck_inquire_category check(category IN ('게시판', '북토리', '대여'))
+	,CONSTRAINT ch_inquire_condition check(condition IN (1, 0))
 	
 );
 CREATE SEQUENCE seq_inquire_no nocache;
@@ -290,13 +294,12 @@ CREATE TABLE used_board_attachment (
 CREATE SEQUENCE seq_used_board_attachment_no nocache;
 
 CREATE TABLE chat_room (
-	chat_room_id	varchar2(200)	NOT NULL,
-	chat_member_id	varchar2(50)		NOT NULL
+	chat_room_id	number		NOT NULL,
+	chat_member_id	varchar2(20)		NOT NULL
 
 	,constraint pk_chat_room_chat_room_id_chat_member_id PRIMARY KEY(chat_room_id, chat_member_id)
+	,constraint fk_chat_room_chat_member_id FOREIGN key(chat_member_id) REFERENCES member(id)
 );
-commit;
-select * from chat_room;
 
 -- CREATE TABLE chat_history (
 -- 	chat_room_id	number		NOT NULL,
@@ -313,7 +316,7 @@ select * from chat_room;
 -- );
 
 CREATE TABLE chat_history (
-	chat_room_id	varchar2(200)	NOT NULL,
+	chat_room_id	number		NOT NULL,
 	sender_id	varchar2(20)		NOT NULL,
 	message	varchar2(300)		NULL,
 	send_date	date	DEFAULT current_date	NULL
@@ -363,36 +366,3 @@ CREATE TABLE my_trade_history (
 	,constraint pk_my_trade_history_rent_no PRIMARY KEY(rent_no)
 );
 CREATE SEQUENCE seq_my_trade_history_rent_no nocache;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-select * from member;
-
-
-
