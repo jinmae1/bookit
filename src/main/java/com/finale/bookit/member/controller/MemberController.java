@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.finale.bookit.member.model.service.MemberService;
 import com.finale.bookit.member.model.vo.Address;
 import com.finale.bookit.member.model.vo.Member;
+import com.finale.bookit.member.model.vo.MemberEntity;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -75,10 +77,9 @@ public class MemberController {
 			RedirectAttributes redirectAttr
 	) {
 		
-		Member member = memberService.selectOneMember(id);
-		log.info("member = {}", member);
+		MemberEntity member = memberService.selectOneMember(id);
 		log.info("encodedPassword = {}", bcryptPasswordEncoder.encode(password));
-
+		
 		String location = "/";
 		if(member != null && bcryptPasswordEncoder.matches(password, member.getPassword())) {
 			// 로그인 성공시
@@ -261,7 +262,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberEnroll.do")
-	public String memberEnroll(Member member, Address address, RedirectAttributes redirectAttr) {
+	public String memberEnroll(MemberEntity member, Address address, RedirectAttributes redirectAttr) {
 		log.info("member = {}", member);
 		log.info("address = {}", address);
 		// 비밀번호 암호화 처리
@@ -295,7 +296,7 @@ public class MemberController {
 			@RequestParam String nickname,
 			@RequestParam String email,
 			@RequestParam String phone,
-			@SessionAttribute Member loginMember,
+			@SessionAttribute MemberEntity loginMember,
 			RedirectAttributes redirectAttr) {
 		String id = loginMember.getId();
 		Map<String, Object> param = new HashMap<>();

@@ -237,6 +237,19 @@ CREATE TABLE authority (
 	,constraint pk_authority_authority PRIMARY KEY(authority, member_id) -- 기본키 복합키로 변경했습니다.
 	,constraint fk_authority_member_id FOREIGN key(member_id) REFERENCES member(id)
 );
+--모든 사용자에게 공통권한 ROLE_USER 부여
+select * from member;
+select * from authority;
+
+select
+    *
+from
+    member m join authority a
+        on m.id = a.member_id
+where
+    m.id = 'honggd';
+
+
 
 CREATE TABLE board_id (
 	board_id	varchar2(20)		NOT NULL,

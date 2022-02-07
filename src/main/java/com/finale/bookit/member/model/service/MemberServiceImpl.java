@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.finale.bookit.member.model.dao.MemberDao;
 import com.finale.bookit.member.model.vo.Address;
-import com.finale.bookit.member.model.vo.Member;
+import com.finale.bookit.member.model.vo.MemberEntity;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,12 +21,12 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDao memberDao;
 	
 	@Override
-	public int insertMember(Member member) {
+	public int insertMember(MemberEntity member) {
 		return memberDao.insertMember(member);
 	}
 	
 	@Override
-	public int insertMember(Member member, Address address) {
+	public int insertMember(MemberEntity member, Address address) {
 		int result = memberDao.insertMember(member);
 		if (result > 0) {
 			result = insertAddress(address);
@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member selectOneMember(String id) {
+	public MemberEntity selectOneMember(String id) {
 		return memberDao.selectOneMember(id);
 	}
 

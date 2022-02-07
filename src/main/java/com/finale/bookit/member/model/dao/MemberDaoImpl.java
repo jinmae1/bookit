@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.finale.bookit.member.model.vo.Address;
-import com.finale.bookit.member.model.vo.Member;
+import com.finale.bookit.member.model.vo.MemberEntity;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
@@ -16,12 +16,12 @@ public class MemberDaoImpl implements MemberDao {
 	private SqlSessionTemplate session;
 	
 	@Override
-	public int insertMember(Member member) {
+	public int insertMember(MemberEntity member) {
 		return session.insert("member.insertMember", member);
 	}
 
 	@Override
-	public Member selectOneMember(String id) {
+	public MemberEntity selectOneMember(String id) {
 		return session.selectOne("member.selectOneMember", id);
 	}
 
